@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/style.css">
+<script type="text/javascript" src="js/sidebar.load.js"></script>
+<script type="text/javascript" src="js/sidebar.interaction.js"></script>
+<title>TEST</title>
+</head>
+
+<body>
+<svg t="1618137355447" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8901" width="200" height="200"><path d="M326.4 665.6m-22.4 0a22.4 22.4 0 1 0 44.8 0 22.4 22.4 0 1 0-44.8 0Z" p-id="8902" fill="white"></path><path d="M601.6 617.6m-22.4 0a22.4 22.4 0 1 0 44.8 0 22.4 22.4 0 1 0-44.8 0Z" p-id="8903" fill="white"></path><path d="M512 32C246.4 32 32 246.4 32 512s214.4 480 480 480 480-214.4 480-480S777.6 32 512 32z m176 585.6c0 51.2-38.4 89.6-86.4 89.6-48 0-86.4-38.4-86.4-86.4s38.4-86.4 86.4-86.4c9.6 0 16 0 22.4 3.2v-99.2L412.8 480V668.8c0 48-38.4 86.4-86.4 86.4-48 0-86.4-38.4-86.4-86.4s38.4-86.4 86.4-86.4c9.6 0 16 0 22.4 3.2v-214.4c0-25.6 19.2-51.2 48-57.6l208-48c25.6-6.4 48 0 64 12.8 12.8 9.6 19.2 25.6 19.2 41.6v297.6z" p-id="8904" fill="white"></path><path d="M412.8 371.2v41.6l211.2-44.8v-44.8h-6.4l-204.8 48z" p-id="8905" fill="white"></path></svg>
+<img src="img/comic/1.jpg" alt="data comic" class="comic">
+<audio src="music/background.aac" type="audio/aac" id="background" preload="auto" loop="loop"></audio>
+<audio src="music/1.aac" type="audio/aac" id="storytelling" preload="auto"></audio>
+</body>
+
+<script type="text/javascript">
+	const COMIC_MAXNUM = 20;
+	//const STORY_MAXNUM = 20;
+	const BG_COLOR = {1:'#bfbfbf',2:'#bfbfbf',3:'white',4:'white',
+						5:'white',6:'#bfbfbf',7:'white',8:'white',
+						9:'#9aa6d0',19:"#174f96",20:"#ede374"};
+	const PAGE_GRAPH = {2:0,6:1,7:2,8:2,9:3,12:4,13:5,14:6,15:7,16:8,17:9};
+	let pageNow=1;
+	let isBgColorExisted=true;
+	let isGraphExisted=false;
+	
+	window.onload = function () {
+    loadSideBar();
+}
+	
+	function loadSideBar(){
+		let sideBar = document.createElement('div');
+		sideBar.setAttribute('class','sideBar');
+		
+		sideBar.onmouseover = function() { showSidebar(this) };
+		sideBar.onmouseout = function() { hideSidebar(this) };
+		document.body.children[0].after(sideBar);
+		
+		let graph = document.createElement('img');
+		graph.setAttribute('class','graph');
+		sideBar.appendChild(graph);
+	}
+	
+	function getEleByClass(className){
+		let elements=document.getElementsByClassName(className);
+		if (elements.length === 1) {
+			let element=elements[0];
+			return element;
+		} else {
+			return null;
+		}
+	}
+	
+	function checkBgColor(){
+		if (pageNow in BG_COLOR){
+			isBgColorExisted = true;
+		} else {
+			isBgColorExisted = false;
+		}
+	}
+	
+	function checkGraph(){
+		if (pageNow in PAGE_GRAPH){
+			isGraphExisted = true;
+		} else {
+			isGraphExisted = false;
+		}
+	}
+	
+	function playSound(id) {
+		var music =  document.getElementById(id);
+		if (id==="background") {
+			music.volume = 0.3;
+		} else {
+			music.volume = 1.0;
+		}
+		if (music.paused) { //判读是否播放
+			//music.paused=false;
+			music.play(); //没有就播放 
+		}
+	}
+	
+	// 展开导航菜单
+	function showSidebar(x) {
+		x.style.width="800px";
+		x.style.backgroundColor="white";
+		let graph=getEleByClass("graph");
+		if (graph!==null) {
+			graph.style.opacity = "1";
+		}
+	}
+
+	function hideSidebar(x) {
+		checkSidebarDisplay();
+		x.style.backgroundColor="gray";
+		let graph=getEleByClass("graph");
+		if (graph!==null) {
+			graph.style.opacity = "0";
+		}
+	}
+	
+	function checkSidebarDisplay() {
+		let sideBar=getEleByClass("sideBar")
+		if (sideBar!==null) {
+			if (isGraphExisted){
+				sideBar.style.width="6px";
+			} else {
+				sideBar.style.width="0px";
+			}
+		}
+	}
+
+	window.addEventListener("click", function(e) {
+		e.preventDefault();
+		if (pageNow<COMIC_MAXNUM){
+			pageNow+=1;
+			checkBgColor();
+			checkGraph();
+			changeComic();
+			changeGraph();
+			checkSidebarDisplay();
+			changeStory();
+			playSound("background");
+			playSound("storytelling");
+		}
+	})
+	
+	window.addEventListener("contextmenu", function(e) {
+		e.preventDefault();
+		if (pageNow>1){
+			pageNow-=1;
+			checkBgColor();
+			checkGraph();
+			changeComic();
+			changeGraph();
+			checkSidebarDisplay();
+			changeStory();
+			playSound("background");
+			playSound("storytelling");
+		}
+	})
+	
+	function changeComic(){
+		let comic=getEleByClass("comic")
+		if (comic!==null) {
+			comic.setAttribute('src','img/comic/'+pageNow.toString()+'.jpg');
+			if (isBgColorExisted){
+				document.body.style.backgroundColor=BG_COLOR[pageNow];
+			} else {
+				document.body.style.backgroundColor="black";
+			}
+		}
+	}
+	
+	function changeGraph(){
+		let graph=getEleByClass("graph");
+		if (graph!==null) {
+			if (pageNow in PAGE_GRAPH){
+				let graph_num=PAGE_GRAPH[pageNow].toString();
+				graph.setAttribute('src','img/graph/'+graph_num+'.jpg');
+			} else {
+				graph.setAttribute('src','');
+			}
+		}
+		
+	}
+	
+	function changeStory(){
+		var story =  document.getElementById("storytelling");
+		story.setAttribute('src','music/'+pageNow.toString()+'.aac');
+	}
+
+</script>
+    
+</html>

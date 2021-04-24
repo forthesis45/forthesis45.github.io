@@ -1,0 +1,82 @@
+body{
+	background-color: #bfbfbf;
+}
+
+/*侧导航栏*/
+.sideBar {
+  height: calc(100% - 40px);
+  width: 0px;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  background-color: gray;
+  overflow-x: hidden;
+  padding-top: 40px;
+  opacity: 0.9;
+  
+  transition: 0.5s;
+}
+
+.icon {
+  position: fixed;
+  z-index: 1;
+  top: 2%;
+  right: 2%;
+  width: 40px;
+  height: 40px;
+  fill: black;
+  animation: play 3s linear 0s infinite;
+}
+
+.comic{
+	position: absolute;
+	max-width: 100%;
+	margin: auto;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.graph{
+	max-width: 100%;
+	margin: auto;
+}
+
+img.graph {
+  opacity: 0;
+}
+
+/*滚动条*/
+.sideBar::-webkit-scrollbar {
+    width: 6px;
+    height: 200px;
+}
+
+/*滚动条滑块*/
+.sideBar::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 10px;
+    background: var(--scrollbar-thumb-color);
+}
+
+/*滚动条轨道*/
+.sideBar::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    box-shadow: inset 0 0 5px #d8d8d8;
+    border-radius: 10px;
+    background: #ededed;
+}
+
+@keyframes play {
+	0% {
+		transform: rotate(0deg);
+	}
+	50% {
+		transform: rotate(180deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
